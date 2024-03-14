@@ -60,6 +60,7 @@ public class w2052769_PlaneManagement {
                 break;
             case 4:
                 System.out.println(choice);
+                show_seating_plan();
                 break;
             case 5:
                 System.out.println(choice);
@@ -216,7 +217,42 @@ public class w2052769_PlaneManagement {
             }
         }
     }
-
+    private static void show_seating_plan(){
+        System.out.print("\n");
+        for (int seatNumber = 0; seatNumber < 14; seatNumber++) {
+            if (SeatsArray[0][seatNumber] == 0){
+                System.out.print("O ");
+            } else {
+                System.out.print("X ");
+            }
+        }
+        System.out.print("\n");
+        for (int seatNumber = 0; seatNumber < 12; seatNumber++) {
+            if (SeatsArray[1][seatNumber] == 0){
+                System.out.print("O ");
+            } else {
+                System.out.print("X ");
+            }
+        }
+        System.out.print("\n");
+        for (int seatNumber = 0; seatNumber < 12; seatNumber++) {
+            if (SeatsArray[2][seatNumber] == 0){
+                System.out.print("O ");
+            } else {
+                System.out.print("X ");
+            }
+        }
+        System.out.print("\n");
+        for (int seatNumber = 0; seatNumber < 14; seatNumber++) {
+            if (SeatsArray[3][seatNumber] == 0){
+                System.out.print("O ");
+            } else {
+                System.out.print("X ");
+            }
+        }
+        System.out.print("\n");
+        show_menu();
+    }
 
 
 }
