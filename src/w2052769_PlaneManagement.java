@@ -6,7 +6,8 @@ public class w2052769_PlaneManagement {
         gen_seat_list();
         show_menu();
     }
-    public static int[][] SeatsArray = new int[4][14]; // Static field (acts like a global array)
+    private static int[][] SeatsArray = new int[4][14]; // Static field (acts like a global array)
+    private static Ticket[][] Sold_Tickets = new Ticket[4][14]; // Static field (acts like a global array)
     private static void gen_seat_list(){
 
         for (int col = 0; col < 14; col++) {
@@ -134,7 +135,7 @@ public class w2052769_PlaneManagement {
         }
     }
 
-    static int get_seat_number(int max_seat) {
+    private static int get_seat_number(int max_seat) {
         Scanner input = new Scanner(System.in);
         int seat_number;
         try {
@@ -151,9 +152,41 @@ public class w2052769_PlaneManagement {
         return seat_number;
     }
 
+    private static String get_input(String TextToPrint) {
+        Scanner input = new Scanner(System.in);
+        String text;
+        try {
+            System.out.println(TextToPrint+" : ");
+            text = input.nextLine();
+            return text;
+        } catch (Exception e) {
+            System.out.println("Invalid Input !");
+            return  get_input(TextToPrint);
+        }
+    }
+
+    private static double get_seat_price(int seat) {
+        if (seat <= 5){
+            return 200;
+        } else if (seat <= 9) {
+            return 150;
+        } else if (seat <= 15) {
+            return 100;
+        } else{
+            System.out.println("Invalid Seat Number ! "+ seat);
+            return 0;
+        }
+    }
+
     private static void buy_seat(int row, int seatNumber){
         if (SeatsArray[row][seatNumber] == 0){
+            String name = get_input("Enter Your First Name");
+            String surname = get_input("Enter Your Last Name");
+            String email = get_input("Enter Your Email");
+            Person person = new Person(name, surname, email);
+            Ticket ticket = new Ticket(row, seatNumber, get_seat_price(seatNumber), person);
             SeatsArray[row][seatNumber] = 1;
+            Sold_Tickets[row][seatNumber] = ticket;
             System.out.println("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been purchased successfully.\n");
             show_menu();
         } else{
@@ -161,6 +194,8 @@ public class w2052769_PlaneManagement {
             show_menu();
         }
     }
+
+
     private static void cancel_seat(int row, int seatNumber){
         if (SeatsArray[row][seatNumber] == 1){
             SeatsArray[row][seatNumber] = 0;
@@ -172,7 +207,7 @@ public class w2052769_PlaneManagement {
         }
     }
 
-    static String seat_number_to_letter(int seat) {
+    private static String seat_number_to_letter(int seat) {
         switch (seat) {
             case 0:
                 return "A";

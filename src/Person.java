@@ -35,8 +35,8 @@ public class Person {
 
     // Method to print information
     public void printPersonInfo() {
-        System.out.println("Name: " + name);
-        System.out.println("Surname: " + surname);
+        System.out.println("First Name: " + name);
+        System.out.println("Last name: " + surname);
         System.out.println("Email: " + email);
     }
 
