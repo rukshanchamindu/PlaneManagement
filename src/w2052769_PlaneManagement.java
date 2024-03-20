@@ -25,21 +25,19 @@ public class w2052769_PlaneManagement {
     }
 
     private static void show_menu(){
-        System.out.println("**********************************************\n" +
-                "*" +
-                "                MENU OPTIONS                " +
-                "*\n" +
-                "**********************************************\n" +
-                "1) Buy a seat\n" +
-                "2) Cancel a seat\n" +
-                "3) Find first available seat\n" +
-                "4) Show seating plan\n" +
-                "5) Print tickets information and total sales\n" +
-                "6) Search ticket\n" +
-                "0) Quit\n" +
-                "**********************************************\n" +
-                "Please select an option:");
-        Scanner input = new Scanner(System.in);
+        System.out.println("""
+                **********************************************
+                *                MENU OPTIONS                *
+                **********************************************
+                1) Buy a seat
+                2) Cancel a seat
+                3) Find first available seat
+                4) Show seating plan
+                5) Print tickets information and total sales
+                6) Search ticket
+                0) Quit
+                **********************************************
+                Please select an option:""");
 
         int choice = get_choice();
 
@@ -65,6 +63,7 @@ public class w2052769_PlaneManagement {
                 break;
             case 5:
                 System.out.println(choice);
+                print_tickets_info();
                 break;
             case 6:
                 System.out.println(choice);
@@ -93,7 +92,7 @@ public class w2052769_PlaneManagement {
         return choice;
     }
 
-    private static void reserve_seat(boolean ispurchase) {
+    private static void reserve_seat(boolean purchase) {
 
         Scanner input = new Scanner(System.in);
         String row;
@@ -121,15 +120,15 @@ public class w2052769_PlaneManagement {
                     break;
                 default:
                     System.out.println("Invalid Row Letter ! ");
-                    reserve_seat(ispurchase);
+                    reserve_seat(purchase);
                     break;
                 
             }
         } catch (Exception e) {
             System.out.println("Invalid Row Letter ! ");
-            reserve_seat(ispurchase);
+            reserve_seat(purchase);
         }
-        if (ispurchase) {
+        if (purchase) {
             buy_seat(row_number, seat_number - 1);
         }else{
             cancel_seat(row_number, seat_number - 1);
@@ -176,7 +175,7 @@ public class w2052769_PlaneManagement {
         } else if (seat <= 9) {
             return 150;
         } else if (seat <= 15) {
-            return 100;
+            return 180;
         } else{
             System.out.println("Invalid Seat Number ! "+ seat);
             return 0;
@@ -229,32 +228,14 @@ public class w2052769_PlaneManagement {
     }
 
     private static void first_available_seat(){
-        for (int seatNumber = 0; seatNumber < 14; seatNumber++) {
-            if (SeatsArray[0][seatNumber] == 0){
-                System.out.println("\nFirst Available Seat " + (seat_number_to_letter(0)) +"-"+ (seatNumber + 1) + " \n");
-                show_menu();
-                return;
-            }
-        }
-        for (int seatNumber = 0; seatNumber < 12; seatNumber++) {
-            if (SeatsArray[1][seatNumber] == 0){
-                System.out.println("\nFirst Available Seat " + (seat_number_to_letter(1)) +"-"+ (seatNumber + 1) + " \n");
-                show_menu();
-                return;
-            }
-        }
-        for (int seatNumber = 0; seatNumber < 12; seatNumber++) {
-            if (SeatsArray[2][seatNumber] == 0){
-                System.out.println("\nFirst Available Seat " + (seat_number_to_letter(2)) +"-"+ (seatNumber + 1) + " \n");
-                show_menu();
-                return;
-            }
-        }
-        for (int seatNumber = 0; seatNumber < 14; seatNumber++) {
-            if (SeatsArray[3][seatNumber] == 0){
-                System.out.println("\nFirst Available Seat " + (seat_number_to_letter(3)) +"-"+ (seatNumber + 1) + " \n");
-                show_menu();
-                return;
+        for (int row = 0; row < SeatsArray.length; row++) {
+            int seatsInRow = SeatsArray[row].length;
+            for (int seatNumber = 0; seatNumber < seatsInRow; seatNumber++) {
+                if (SeatsArray[row][seatNumber] == 0) {
+                    System.out.println("\nFirst Available Seat " + (seat_number_to_letter(row)) + "-" + (seatNumber + 1) + " \n");
+                    show_menu();
+                    return;
+                }
             }
         }
     }
@@ -296,7 +277,27 @@ public class w2052769_PlaneManagement {
     }
 
     public static void print_tickets_info() {
-
+        double total = 0;
+        String total_text = "";
+        for (int row = 0; row < SeatsArray.length; row++) {
+            int seatsInRow = SeatsArray[row].length;
+            for (int seatNumber = 0; seatNumber < seatsInRow; seatNumber++) {
+                if (SeatsArray[row][seatNumber] == 1) {
+                    if (!total_text.isEmpty()){
+                        total_text = total_text + " + ";
+                    }
+                    double ticket_price = Sold_Tickets[row][seatNumber].getPrice();
+                    total += ticket_price;
+                    total_text = total_text + seat_number_to_letter(row) + (seatNumber+1) + " = £" + ticket_price;
+                }
+            }
+        }
+        if (total_text.isEmpty()){
+            System.out.println("There is no ticket reserved yet.");
+        } else {
+            System.out.println("£" + total + " ("+ total_text + ")");
+        }
+        show_menu();
     }
 
     private static void search_ticket() {
@@ -342,7 +343,5 @@ public class w2052769_PlaneManagement {
         }
         show_menu();
     }
-
-
 }
 
