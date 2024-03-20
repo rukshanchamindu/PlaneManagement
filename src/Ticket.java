@@ -1,10 +1,10 @@
 public class Ticket {
-    private int row;
+    private String row;
     private int seat;
     private Double price;
     private Person person;
     // Constructor
-    public Ticket(int row, int seat, double price, Person person) {
+    public Ticket(String row, int seat, double price, Person person) {
         this.row = row;
         this.seat = seat;
         this.price = price;
@@ -12,11 +12,11 @@ public class Ticket {
     }
 
     // Getters and Setters
-    public int getRow() {
+    public String  getRow() {
         return row;
     }
 
-    public void setRow(int row) {
+    public void setRow(String row) {
         this.row = row;
     }
 
@@ -58,7 +58,7 @@ public class Ticket {
     // Example usage
     public static void main(String[] args) {
         Person person = new Person("Ruki", "White", "ruki.white@example.com");
-        Ticket ticket = new Ticket(3, 12, 50.0, person);
+        Ticket ticket = new Ticket("A", 12, 50.0, person);
         ticket.printTicketInfo();
     }
 }

@@ -49,11 +49,11 @@ public class w2052769_PlaneManagement {
                 break;
             case 1:
                 System.out.println(choice);
-                get_row(true);
+                reserve_seat(true);
                 break;
             case 2:
                 System.out.println(choice);
-                get_row(false);
+                reserve_seat(false);
                 break;
             case 3:
                 System.out.println(choice);
@@ -68,6 +68,7 @@ public class w2052769_PlaneManagement {
                 break;
             case 6:
                 System.out.println(choice);
+                search_ticket();
                 break;
             default:
                 System.out.println("Invalid Option ! , Please select an option:");
@@ -79,7 +80,7 @@ public class w2052769_PlaneManagement {
         Scanner input = new Scanner(System.in);
         try {
             choice = input.nextInt();
-            if(choice < 0 || choice > 5){
+            if(choice < 0 || choice > 6){
                 System.out.println("Invalid Option ! , Please select an option:");
                 return get_choice();
             }
@@ -92,7 +93,7 @@ public class w2052769_PlaneManagement {
         return choice;
     }
 
-    private static void get_row(boolean ispurchase) {
+    private static void reserve_seat(boolean ispurchase) {
 
         Scanner input = new Scanner(System.in);
         String row;
@@ -120,13 +121,13 @@ public class w2052769_PlaneManagement {
                     break;
                 default:
                     System.out.println("Invalid Row Letter ! ");
-                    get_row(ispurchase);
+                    reserve_seat(ispurchase);
                     break;
                 
             }
         } catch (Exception e) {
             System.out.println("Invalid Row Letter ! ");
-            get_row(ispurchase);
+            reserve_seat(ispurchase);
         }
         if (ispurchase) {
             buy_seat(row_number, seat_number - 1);
@@ -158,6 +159,10 @@ public class w2052769_PlaneManagement {
         try {
             System.out.println(TextToPrint+" : ");
             text = input.nextLine();
+            if (text.isEmpty()) {
+                System.out.println("Invalid Input !");
+                return  get_input(TextToPrint);
+            }
             return text;
         } catch (Exception e) {
             System.out.println("Invalid Input !");
@@ -184,7 +189,7 @@ public class w2052769_PlaneManagement {
             String surname = get_input("Enter Your Last Name");
             String email = get_input("Enter Your Email");
             Person person = new Person(name, surname, email);
-            Ticket ticket = new Ticket(row, seatNumber, get_seat_price(seatNumber), person);
+            Ticket ticket = new Ticket(seat_number_to_letter(row), (seatNumber+1), get_seat_price(seatNumber), person);
             SeatsArray[row][seatNumber] = 1;
             Sold_Tickets[row][seatNumber] = ticket;
             System.out.println("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been purchased successfully.\n");
@@ -199,6 +204,7 @@ public class w2052769_PlaneManagement {
     private static void cancel_seat(int row, int seatNumber){
         if (SeatsArray[row][seatNumber] == 1){
             SeatsArray[row][seatNumber] = 0;
+            Sold_Tickets[row][seatNumber] = null;
             System.out.println("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been canceled successfully.\n");
             show_menu();
         } else{
@@ -207,7 +213,7 @@ public class w2052769_PlaneManagement {
         }
     }
 
-    private static String seat_number_to_letter(int seat) {
+    public static String seat_number_to_letter(int seat) {
         switch (seat) {
             case 0:
                 return "A";
@@ -286,6 +292,54 @@ public class w2052769_PlaneManagement {
             }
         }
         System.out.print("\n");
+        show_menu();
+    }
+
+    public static void print_tickets_info() {
+
+    }
+
+    private static void search_ticket() {
+        Scanner input = new Scanner(System.in);
+        String row;
+        int row_number = 0;
+        int seat_number = 0;
+        try {
+            System.out.println("Enter Row Letter (A,B,C,D): ");
+            row = input.nextLine();
+            switch (row.toUpperCase()) {
+                case "A":
+                    seat_number = get_seat_number(14);
+                    row_number = 0;
+                    break;
+                case "B":
+                    seat_number = get_seat_number(12);
+                    row_number = 1;
+                    break;
+                case "C":
+                    seat_number = get_seat_number(12);
+                    row_number = 2;
+                    break;
+                case "D":
+                    seat_number = get_seat_number(14);
+                    row_number = 3;
+                    break;
+                default:
+                    System.out.println("Invalid Row Letter ! ");
+                    search_ticket();
+                    break;
+
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid Row Letter ! ");
+            search_ticket();
+        }
+        if (Sold_Tickets[row_number][seat_number-1] != null){
+            Sold_Tickets[row_number][seat_number-1].printTicketInfo();
+
+        } else {
+            System.out.println("Seat " + (seat_number_to_letter(row_number)) +" "+ (seat_number) + " is not reserved yet.\n");
+        }
         show_menu();
     }
 
