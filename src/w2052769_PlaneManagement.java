@@ -46,27 +46,27 @@ public class w2052769_PlaneManagement {
                 System.exit(0);
                 break;
             case 1:
-                System.out.println(choice);
+//                System.out.println(choice);
                 reserve_seat(true);
                 break;
             case 2:
-                System.out.println(choice);
+//                System.out.println(choice);
                 reserve_seat(false);
                 break;
             case 3:
-                System.out.println(choice);
+//                System.out.println(choice);
                 first_available_seat();
                 break;
             case 4:
-                System.out.println(choice);
+//                System.out.println(choice);
                 show_seating_plan();
                 break;
             case 5:
-                System.out.println(choice);
+//                System.out.println(choice);
                 print_tickets_info();
                 break;
             case 6:
-                System.out.println(choice);
+//                System.out.println(choice);
                 search_ticket();
                 break;
             default:
@@ -188,9 +188,10 @@ public class w2052769_PlaneManagement {
             String surname = get_input("Enter Your Last Name");
             String email = get_input("Enter Your Email");
             Person person = new Person(name, surname, email);
-            Ticket ticket = new Ticket(seat_number_to_letter(row), (seatNumber+1), get_seat_price(seatNumber), person);
+            Ticket ticket = new Ticket(seat_number_to_letter(row), (seatNumber+1), get_seat_price(seatNumber+1), person);
             SeatsArray[row][seatNumber] = 1;
             Sold_Tickets[row][seatNumber] = ticket;
+            ticket.save();
             System.out.println("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been purchased successfully.\n");
             show_menu();
         } else{
