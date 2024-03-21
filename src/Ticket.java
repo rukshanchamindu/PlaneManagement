@@ -65,12 +65,6 @@ public class Ticket {
         ticket.printTicketInfo();
     }
 
-    private static void create_ticket_file(Ticket ticket) {
-
-    }
-
-
-
     public void save() {
         String text = "Ticket Information: "+
                 "\nRow: " + this.row+
@@ -83,13 +77,13 @@ public class Ticket {
         String filename = this.row+this.seat+".txt";
         File file = new File(filename);
         if (file.exists()){
-            System.out.println("File already exists.");
+//            System.out.println("File already exists.");
             write_ticket_file(text, filename);
         }else{
             try {
                 boolean file_created = file.createNewFile();
                 if (file_created){
-                    System.out.println("File created: " + file.getName());
+//                    System.out.println("File created: " + file.getName());
                     write_ticket_file(text, filename);
                 }
                 else{
@@ -105,9 +99,20 @@ public class Ticket {
             FileWriter Writer = new FileWriter(filename);
             Writer.write(text);
             Writer.close();
-            System.out.println("Successfully wrote to the file.");
+//            System.out.println("Successfully wrote to the file.");
         } catch (Exception e) {
             System.out.println("Failed To write a text file "+filename+" "+e);
+        }
+    }
+    public void delete() {
+        String filename = this.row+this.seat+".txt";
+        File file = new File(filename);
+        if (file.exists()){
+            file.delete();
+//            System.out.println("File deleted.");
+        }
+        else{
+            System.out.println("File does not exist.");
         }
     }
 }

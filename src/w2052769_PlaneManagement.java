@@ -1,31 +1,25 @@
 import java.util.Scanner;
 
 public class w2052769_PlaneManagement {
+    private static int[][] SeatsArray = new int[4][]; // creating array for store seat status
+    private static Ticket[][] Sold_Tickets = new Ticket[4][14]; // creating array for store ticket object
     public static void main(String[] args) {
         System.out.println("Welcome to the Plane Management application\n");
         gen_seat_list();
         show_menu();
     }
-    private static int[][] SeatsArray = new int[4][14]; // Static field (acts like a global array)
-    private static Ticket[][] Sold_Tickets = new Ticket[4][14]; // Static field (acts like a global array)
+
     private static void gen_seat_list(){
 
-        for (int col = 0; col < 14; col++) {
-            SeatsArray[0][col] = 0;
-        }
-        for (int col = 0; col < 12; col++) {
-            SeatsArray[1][col] = 0;
-        }
-        for (int col = 0; col < 12; col++) {
-            SeatsArray[2][col] = 0;
-        }
-        for (int col = 0; col < 14; col++) {
-            SeatsArray[3][col] = 0;
-        }
+        SeatsArray[0] = new int[14];
+        SeatsArray[1] = new int[12];
+        SeatsArray[2] = new int[12];
+        SeatsArray[3] = new int[14];
+
     }
 
     private static void show_menu(){
-        System.out.println("""
+        System.out.print("""
                 **********************************************
                 *                MENU OPTIONS                *
                 **********************************************
@@ -37,7 +31,7 @@ public class w2052769_PlaneManagement {
                 6) Search ticket
                 0) Quit
                 **********************************************
-                Please select an option:""");
+                Please select an option: """);
 
         int choice = get_choice();
 
@@ -70,7 +64,7 @@ public class w2052769_PlaneManagement {
                 search_ticket();
                 break;
             default:
-                System.out.println("Invalid Option ! , Please select an option:");
+                System.out.print("Invalid Option ! , Please select an option: ");
         }
     }
 
@@ -80,12 +74,12 @@ public class w2052769_PlaneManagement {
         try {
             choice = input.nextInt();
             if(choice < 0 || choice > 6){
-                System.out.println("Invalid Option ! , Please select an option:");
+                System.out.print("Invalid Option ! , Please select an option: ");
                 return get_choice();
             }
         }
         catch(Exception e) {
-            System.out.println("Invalid Input ! , Please select an option:");
+            System.out.print("Invalid Input ! , Please select an option: ");
             return get_choice();
         }
 
@@ -99,7 +93,7 @@ public class w2052769_PlaneManagement {
         int row_number = 0;
         int seat_number = 0;
         try {
-            System.out.println("Enter Row Letter (A,B,C,D): ");
+            System.out.print("Enter Row Letter (A,B,C,D): ");
             row = input.nextLine();
             switch (row.toUpperCase()) {
                 case "A":
@@ -119,13 +113,13 @@ public class w2052769_PlaneManagement {
                     row_number = 3;
                     break;
                 default:
-                    System.out.println("Invalid Row Letter ! ");
+                    System.out.print("Invalid Row Letter ! ");
                     reserve_seat(purchase);
                     break;
                 
             }
         } catch (Exception e) {
-            System.out.println("Invalid Row Letter ! ");
+            System.out.print("Invalid Row Letter ! ");
             reserve_seat(purchase);
         }
         if (purchase) {
@@ -139,14 +133,14 @@ public class w2052769_PlaneManagement {
         Scanner input = new Scanner(System.in);
         int seat_number;
         try {
-            System.out.println("Enter Seat Number (0 - "+ max_seat +"): ");
+            System.out.print("Enter Seat Number (0 - "+ max_seat +"): ");
             seat_number = input.nextInt();
             if (seat_number < 0 || seat_number > max_seat){
-                System.out.println("Invalid Seat Number ! ");
+                System.out.print("Invalid Seat Number ! ");
                return  get_seat_number(max_seat);
             }
         } catch (Exception e) {
-            System.out.println("Invalid Seat Number ! ");
+            System.out.print("Invalid Seat Number ! ");
             return  get_seat_number(max_seat);
         }
         return seat_number;
@@ -156,15 +150,15 @@ public class w2052769_PlaneManagement {
         Scanner input = new Scanner(System.in);
         String text;
         try {
-            System.out.println(TextToPrint+" : ");
+            System.out.print(TextToPrint+" : ");
             text = input.nextLine();
             if (text.isEmpty()) {
-                System.out.println("Invalid Input !");
+                System.out.print("Invalid Input !");
                 return  get_input(TextToPrint);
             }
             return text;
         } catch (Exception e) {
-            System.out.println("Invalid Input !");
+            System.out.print("Invalid Input !");
             return  get_input(TextToPrint);
         }
     }
@@ -177,7 +171,7 @@ public class w2052769_PlaneManagement {
         } else if (seat <= 15) {
             return 180;
         } else{
-            System.out.println("Invalid Seat Number ! "+ seat);
+            System.out.print("Invalid Seat Number ("+ seat+") ! ");
             return 0;
         }
     }
@@ -192,10 +186,10 @@ public class w2052769_PlaneManagement {
             SeatsArray[row][seatNumber] = 1;
             Sold_Tickets[row][seatNumber] = ticket;
             ticket.save();
-            System.out.println("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been purchased successfully.\n");
+            System.out.print("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been purchased successfully.\n");
             show_menu();
         } else{
-            System.out.println("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " is already purchased.\n");
+            System.out.print("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " is already purchased.\n");
             show_menu();
         }
     }
@@ -204,11 +198,12 @@ public class w2052769_PlaneManagement {
     private static void cancel_seat(int row, int seatNumber){
         if (SeatsArray[row][seatNumber] == 1){
             SeatsArray[row][seatNumber] = 0;
+            Sold_Tickets[row][seatNumber].delete();
             Sold_Tickets[row][seatNumber] = null;
-            System.out.println("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been canceled successfully.\n");
+            System.out.print("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been canceled successfully.\n");
             show_menu();
         } else{
-            System.out.println("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " is not canceled.\n");
+            System.out.print("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " is not purchased Yet.\n");
             show_menu();
         }
     }
@@ -242,38 +237,50 @@ public class w2052769_PlaneManagement {
     }
     private static void show_seating_plan(){
         System.out.print("\n");
-        for (int seatNumber = 0; seatNumber < 14; seatNumber++) {
-            if (SeatsArray[0][seatNumber] == 0){
-                System.out.print("O ");
-            } else {
-                System.out.print("X ");
+        for (int row = 0; row < SeatsArray.length; row++) {
+            int seatsInRow = SeatsArray[row].length;
+            for (int seatNumber = 0; seatNumber < seatsInRow; seatNumber++) {
+                if (SeatsArray[row][seatNumber] == 0){
+                    System.out.print("O ");
+                } else {
+                    System.out.print("X ");
+                }
             }
+            System.out.println();
         }
-        System.out.print("\n");
-        for (int seatNumber = 0; seatNumber < 12; seatNumber++) {
-            if (SeatsArray[1][seatNumber] == 0){
-                System.out.print("O ");
-            } else {
-                System.out.print("X ");
-            }
-        }
-        System.out.print("\n");
-        for (int seatNumber = 0; seatNumber < 12; seatNumber++) {
-            if (SeatsArray[2][seatNumber] == 0){
-                System.out.print("O ");
-            } else {
-                System.out.print("X ");
-            }
-        }
-        System.out.print("\n");
-        for (int seatNumber = 0; seatNumber < 14; seatNumber++) {
-            if (SeatsArray[3][seatNumber] == 0){
-                System.out.print("O ");
-            } else {
-                System.out.print("X ");
-            }
-        }
-        System.out.print("\n");
+
+//        for (int seatNumber = 0; seatNumber < 14; seatNumber++) {
+//            if (SeatsArray[0][seatNumber] == 0){
+//                System.out.print("O ");
+//            } else {
+//                System.out.print("X ");
+//            }
+//        }
+//        System.out.print("\n");
+//        for (int seatNumber = 0; seatNumber < 12; seatNumber++) {
+//            if (SeatsArray[1][seatNumber] == 0){
+//                System.out.print("O ");
+//            } else {
+//                System.out.print("X ");
+//            }
+//        }
+//        System.out.print("\n");
+//        for (int seatNumber = 0; seatNumber < 12; seatNumber++) {
+//            if (SeatsArray[2][seatNumber] == 0){
+//                System.out.print("O ");
+//            } else {
+//                System.out.print("X ");
+//            }
+//        }
+//        System.out.print("\n");
+//        for (int seatNumber = 0; seatNumber < 14; seatNumber++) {
+//            if (SeatsArray[3][seatNumber] == 0){
+//                System.out.print("O ");
+//            } else {
+//                System.out.print("X ");
+//            }
+//        }
+//        System.out.print("\n");
         show_menu();
     }
 
@@ -284,9 +291,6 @@ public class w2052769_PlaneManagement {
             int seatsInRow = SeatsArray[row].length;
             for (int seatNumber = 0; seatNumber < seatsInRow; seatNumber++) {
                 if (SeatsArray[row][seatNumber] == 1) {
-                    if (!total_text.isEmpty()){
-                        total_text = total_text + " + ";
-                    }
                     double ticket_price = Sold_Tickets[row][seatNumber].getPrice();
                     total += ticket_price;
                     total_text = total_text + seat_number_to_letter(row) + (seatNumber+1) + " = £" + ticket_price;
@@ -294,9 +298,9 @@ public class w2052769_PlaneManagement {
             }
         }
         if (total_text.isEmpty()){
-            System.out.println("There is no ticket reserved yet.");
+            System.out.print("There is no ticket reserved yet.");
         } else {
-            System.out.println("£" + total + " ("+ total_text + ")");
+            System.out.print("£" + total + " ("+ total_text + ")");
         }
         show_menu();
     }
