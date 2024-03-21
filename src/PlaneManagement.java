@@ -40,10 +40,10 @@ public class PlaneManagement {
                 System.exit(0);
                 break;
             case 1:
-                reserve_seat(true);
+                buy_seat();
                 break;
             case 2:
-                reserve_seat(false);
+                cancel_seat();
                 break;
             case 3:
                 first_available_seat();
@@ -81,61 +81,57 @@ public class PlaneManagement {
         return choice;
     }
 
-    private static void reserve_seat(boolean purchase) { //getting input for cancel or buy seat and calling buy or sell method after that
+    private static int get_row_index() { //getting input for cancel or buy seat and calling buy or sell method after that
         Scanner input = new Scanner(System.in);
         String row;
-        int row_number = 0;
-        int seat_number = 0;
+        int row_index = 0;
         try {
             System.out.print("Enter Row Letter (A,B,C,D): ");
             row = input.nextLine();
             switch (row.toUpperCase()) {
                 case "A":
-                    seat_number = get_seat_number(14);
-                    row_number = 0;
+                    row_index = 0;
                     break;
                 case "B":
-                    seat_number = get_seat_number(12);
-                    row_number = 1;
+                    row_index = 1;
                     break;
                 case "C":
-                    seat_number = get_seat_number(12);
-                    row_number = 2;
+                    row_index = 2;
                     break;
                 case "D":
-                    seat_number = get_seat_number(14);
-                    row_number = 3;
+                    row_index = 3;
                     break;
                 default:
-                    System.out.print("Invalid Row Letter ! ");
-                    reserve_seat(purchase);
+                    System.out.println("Invalid Row Letter ! ");
+                    get_row_index();
                     break;
-                
             }
         } catch (Exception e) {
-            System.out.print("Invalid Row Letter ! ");
-            reserve_seat(purchase);
+            System.out.println("Invalid Row Letter ! ");
+            get_row_index();
         }
-        if (purchase) {
-            buy_seat(row_number, seat_number - 1);
-        }else{
-            cancel_seat(row_number, seat_number - 1);
-        }
+        return row_index;
     }
 
-    private static int get_seat_number(int max_seat) { //getting correct seat number according to row
+    private static int get_seat_number(int row_index) { //getting correct seat number according to row
         Scanner input = new Scanner(System.in);
+        int max_seat;
+        if (row_index == 0 || row_index == 3){
+            max_seat = 14;
+        }else {
+            max_seat = 12;
+        }
         int seat_number;
         try {
             System.out.print("Enter Seat Number (0 - "+ max_seat +"): ");
             seat_number = input.nextInt();
             if (seat_number < 0 || seat_number > max_seat){
                 System.out.println("Invalid Seat Number ! ");
-               return  get_seat_number(max_seat);
+               return  get_seat_number(row_index);
             }
         } catch (Exception e) {
             System.out.println("Invalid Seat Number ! ");
-            return  get_seat_number(max_seat);
+            return  get_seat_number(row_index);
         }
         return seat_number;
     }
@@ -170,15 +166,17 @@ public class PlaneManagement {
         }
     }
 
-    private static void buy_seat(int row, int seatNumber){ //get user info and store them for feature use
-        if (SeatsArray[row][seatNumber] == 0){
+    private static void buy_seat(){ //get seat locating and get user info and store them for feature use
+        int row_index = get_row_index();
+        int seat_index = get_seat_number(row_index)-1;
+        if (SeatsArray[row_index][seat_index] == 0){
             String name = get_input("Enter Your First Name");
             String surname = get_input("Enter Your Last Name");
             String email = get_input("Enter Your Email");
             Person person = new Person(name, surname, email);
-            Ticket ticket = new Ticket(seat_number_to_letter(row), (seatNumber+1), get_seat_price(seatNumber+1), person);
-            SeatsArray[row][seatNumber] = 1;
-            Sold_Tickets[row][seatNumber] = ticket;
+            Ticket ticket = new Ticket(row_index_to_letter(row_index), (seat_index+1), get_seat_price(seat_index+1), person);
+            SeatsArray[row_index][seat_index] = 1;
+            Sold_Tickets[row_index][seat_index] = ticket;
             ticket.save();
 
             System.out.println("\nTicket Information:");
@@ -189,28 +187,30 @@ public class PlaneManagement {
             System.out.println("Last name: " + person.getSurname());
             System.out.println("Email: " + person.getEmail());
 
-            System.out.print("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been reserved successfully.\n");
+            System.out.print("\nSeat " + (row_index_to_letter(row_index)) +" "+ (seat_index + 1) + " has been reserved successfully.\n");
             press_enter_to_continue();
         } else{
-            System.out.print("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " is already reserved by someone else.\n");
+            System.out.print("\nSeat " + (row_index_to_letter(row_index)) +" "+ (seat_index + 1) + " is already reserved by someone else.\n");
             press_enter_to_continue();
         }
     }
 
-    private static void cancel_seat(int row, int seatNumber){ //clear stored data
-        if (SeatsArray[row][seatNumber] == 1){
-            SeatsArray[row][seatNumber] = 0;
-            Sold_Tickets[row][seatNumber].delete();
-            Sold_Tickets[row][seatNumber] = null;
-            System.out.print("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " has been canceled successfully.\n");
+    private static void cancel_seat(){ //clear stored data
+        int row_index = get_row_index();
+        int seat_index = get_seat_number(row_index)-1;
+        if (SeatsArray[row_index][seat_index] == 1){
+            SeatsArray[row_index][seat_index] = 0;
+            Sold_Tickets[row_index][seat_index].delete();
+            Sold_Tickets[row_index][seat_index] = null;
+            System.out.print("\nSeat " + (row_index_to_letter(row_index)) +" "+ (seat_index + 1) + " has been canceled successfully.\n");
             press_enter_to_continue();
         } else{
-            System.out.print("\nSeat " + (seat_number_to_letter(row)) +" "+ (seatNumber + 1) + " is not reserved yet.\n");
+            System.out.print("\nSeat " + (row_index_to_letter(row_index)) +" "+ (seat_index + 1) + " is not reserved yet.\n");
             press_enter_to_continue();
         }
     }
 
-    public static String seat_number_to_letter(int seat) {//convert row index to letter
+    public static String row_index_to_letter(int seat) {//convert row index to letter
         switch (seat) {
             case 0:
                 return "A";
@@ -230,7 +230,7 @@ public class PlaneManagement {
             int seatsInRow = SeatsArray[row].length;
             for (int seatNumber = 0; seatNumber < seatsInRow; seatNumber++) {
                 if (SeatsArray[row][seatNumber] == 0) {
-                    System.out.println("\nFirst Available Seat " + (seat_number_to_letter(row)) + "-" + (seatNumber + 1) + " \n");
+                    System.out.println("\nFirst Available Seat " + (row_index_to_letter(row)) + "-" + (seatNumber + 1) + " \n");
                     press_enter_to_continue();
                     return;
                 }
@@ -261,7 +261,7 @@ public class PlaneManagement {
                 if (SeatsArray[row][seatNumber] == 1) {
                     double ticket_price = Sold_Tickets[row][seatNumber].getPrice();
                     total += ticket_price;
-                    System.out.println(seat_number_to_letter(row) + (seatNumber+1) + " = £ " + ticket_price);
+                    System.out.println(row_index_to_letter(row) + (seatNumber+1) + " = £ " + ticket_price);
                 }
             }
         }
@@ -275,43 +275,12 @@ public class PlaneManagement {
 
     private static void search_ticket() { //print user selected seat info if  it is reserved
         Scanner input = new Scanner(System.in);
-        String row;
-        int row_number = 0;
-        int seat_number = 0;
-        try {
-            System.out.print("Enter Row Letter (A,B,C,D): ");
-            row = input.nextLine();
-            switch (row.toUpperCase()) {
-                case "A":
-                    seat_number = get_seat_number(14);
-                    row_number = 0;
-                    break;
-                case "B":
-                    seat_number = get_seat_number(12);
-                    row_number = 1;
-                    break;
-                case "C":
-                    seat_number = get_seat_number(12);
-                    row_number = 2;
-                    break;
-                case "D":
-                    seat_number = get_seat_number(14);
-                    row_number = 3;
-                    break;
-                default:
-                    System.out.println("Invalid Row Letter ! ");
-                    search_ticket();
-                    break;
-
-            }
-        } catch (Exception e) {
-            System.out.println("Invalid Row Letter ! ");
-            search_ticket();
-        }
-        if (Sold_Tickets[row_number][seat_number-1] != null){
-            Sold_Tickets[row_number][seat_number-1].printTicketInfo();
+        int row_index = get_row_index();
+        int seat_index = get_seat_number(row_index)-1;
+        if (Sold_Tickets[row_index][seat_index] != null){
+            Sold_Tickets[row_index][seat_index].printTicketInfo();
         } else {
-            System.out.println("Seat " + (seat_number_to_letter(row_number)) +" "+ (seat_number) + " is not reserved yet.\n");
+            System.out.println("Seat " + (row_index_to_letter(row_index)) +" "+ (seat_index+1) + " is not reserved yet.\n");
         }
         press_enter_to_continue();
     }
