@@ -20,17 +20,17 @@ public class PlaneManagement {
 
     private static void show_menu(){ //menu for get options
         System.out.print("""
-                **********************************************
-                *                MENU OPTIONS                *
-                **********************************************
-                1) Buy a seat
-                2) Cancel a seat
-                3) Find first available seat
-                4) Show seating plan
-                5) Print tickets information and total sales
-                6) Search ticket
-                0) Quit
-                **********************************************
+                ***************************************************
+                *                    MENU OPTIONS                 *
+                ***************************************************
+                    1) Buy a seat
+                    2) Cancel a seat
+                    3) Find first available seat
+                    4) Show seating plan
+                    5) Print tickets information and total sales
+                    6) Search ticket
+                    0) Quit
+                ***************************************************
                 Please select an option:\s""");
 
         int choice = get_choice();
@@ -58,7 +58,7 @@ public class PlaneManagement {
                 search_ticket();
                 break;
             default:
-                System.out.print("Invalid Option ! , Please select an option: ");
+                System.out.println("Invalid Option ! , Please select an option: ");
                 show_menu();
         }
     }
@@ -69,12 +69,12 @@ public class PlaneManagement {
         try {
             choice = input.nextInt();
             if(choice < 0 || choice > 6){
-                System.out.print("Invalid Option ! , Please select an option: ");
+                System.out.print("Invalid Option ! \nPlease select an option: ");
                 return get_choice();
             }
         }
         catch(Exception e) {
-            System.out.print("Invalid Input ! , Please select an option: ");
+            System.out.print("Invalid Input ! \nPlease select an option: ");
             return get_choice();
         }
 
