@@ -9,7 +9,7 @@ public class PlaneManagement {
         show_menu();
     }
 
-    private static void gen_seat_list(){
+    private static void gen_seat_list(){ //changing seat array colum length as need
 
         SeatsArray[0] = new int[14];
         SeatsArray[1] = new int[12];
@@ -18,7 +18,7 @@ public class PlaneManagement {
 
     }
 
-    private static void show_menu(){
+    private static void show_menu(){ //menu for get options
         System.out.print("""
                 **********************************************
                 *                MENU OPTIONS                *
@@ -40,35 +40,30 @@ public class PlaneManagement {
                 System.exit(0);
                 break;
             case 1:
-//                System.out.println(choice);
                 reserve_seat(true);
                 break;
             case 2:
-//                System.out.println(choice);
                 reserve_seat(false);
                 break;
             case 3:
-//                System.out.println(choice);
                 first_available_seat();
                 break;
             case 4:
-//                System.out.println(choice);
                 show_seating_plan();
                 break;
             case 5:
-//                System.out.println(choice);
                 print_tickets_info();
                 break;
             case 6:
-//                System.out.println(choice);
                 search_ticket();
                 break;
             default:
                 System.out.print("Invalid Option ! , Please select an option: ");
+                show_menu();
         }
     }
 
-    private static int get_choice(){
+    private static int get_choice(){  //get input for selection and make sure selected option is not in
         int choice = 0;
         Scanner input = new Scanner(System.in);
         try {
@@ -86,8 +81,7 @@ public class PlaneManagement {
         return choice;
     }
 
-    private static void reserve_seat(boolean purchase) {
-
+    private static void reserve_seat(boolean purchase) { //getting input for cancel or buy seat and calling buy or sell method after that
         Scanner input = new Scanner(System.in);
         String row;
         int row_number = 0;
@@ -129,7 +123,7 @@ public class PlaneManagement {
         }
     }
 
-    private static int get_seat_number(int max_seat) {
+    private static int get_seat_number(int max_seat) { //getting correct seat number according to row
         Scanner input = new Scanner(System.in);
         int seat_number;
         try {
@@ -146,7 +140,7 @@ public class PlaneManagement {
         return seat_number;
     }
 
-    private static String get_input(String TextToPrint) {
+    private static String get_input(String TextToPrint) { //show arg text and get string input
         Scanner input = new Scanner(System.in);
         String text;
         try {
@@ -163,7 +157,7 @@ public class PlaneManagement {
         }
     }
 
-    private static double get_seat_price(int seat) {
+    private static double get_seat_price(int seat) { //return seat price
         if (seat <= 5){
             return 200;
         } else if (seat <= 9) {
@@ -176,7 +170,7 @@ public class PlaneManagement {
         }
     }
 
-    private static void buy_seat(int row, int seatNumber){
+    private static void buy_seat(int row, int seatNumber){ //get user info and store them for feature use
         if (SeatsArray[row][seatNumber] == 0){
             String name = get_input("Enter Your First Name");
             String surname = get_input("Enter Your Last Name");
@@ -203,8 +197,7 @@ public class PlaneManagement {
         }
     }
 
-
-    private static void cancel_seat(int row, int seatNumber){
+    private static void cancel_seat(int row, int seatNumber){ //clear stored data
         if (SeatsArray[row][seatNumber] == 1){
             SeatsArray[row][seatNumber] = 0;
             Sold_Tickets[row][seatNumber].delete();
@@ -217,7 +210,7 @@ public class PlaneManagement {
         }
     }
 
-    public static String seat_number_to_letter(int seat) {
+    public static String seat_number_to_letter(int seat) {//convert row index to letter
         switch (seat) {
             case 0:
                 return "A";
@@ -232,7 +225,7 @@ public class PlaneManagement {
         }
     }
 
-    private static void first_available_seat(){
+    private static void first_available_seat(){//return 1st available for buy
         for (int row = 0; row < SeatsArray.length; row++) {
             int seatsInRow = SeatsArray[row].length;
             for (int seatNumber = 0; seatNumber < seatsInRow; seatNumber++) {
@@ -244,7 +237,7 @@ public class PlaneManagement {
             }
         }
     }
-    private static void show_seating_plan(){
+    private static void show_seating_plan(){//create ui for showcase sets
         System.out.print("\n");
         for (int row = 0; row < SeatsArray.length; row++) {
             int seatsInRow = SeatsArray[row].length;
@@ -260,7 +253,7 @@ public class PlaneManagement {
         press_enter_to_continue();
     }
 
-    public static void print_tickets_info() {
+    public static void print_tickets_info() {//print all purchased tickets and print total
         double total = 0;
         for (int row = 0; row < SeatsArray.length; row++) {
             int seatsInRow = SeatsArray[row].length;
@@ -280,7 +273,7 @@ public class PlaneManagement {
         press_enter_to_continue();
     }
 
-    private static void search_ticket() {
+    private static void search_ticket() { //print user selected seat info if  it is reserved
         Scanner input = new Scanner(System.in);
         String row;
         int row_number = 0;
@@ -323,7 +316,7 @@ public class PlaneManagement {
         press_enter_to_continue();
     }
 
-    public static void press_enter_to_continue() {
+    public static void press_enter_to_continue() { //get input before showing main menu
         Scanner input = new Scanner(System.in);
         System.out.print("\nPress Enter To Continue ! ");
         input.nextLine();
