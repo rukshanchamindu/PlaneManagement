@@ -1,10 +1,11 @@
 import java.util.Scanner;
 
 public class PlaneManagement {
-    private static int[][] SeatsArray = new int[4][]; // creating array for store seat status
-    private static Ticket[][] Sold_Tickets = new Ticket[4][14]; // creating array for store ticket object
+    private static final int[][] SeatsArray = new int[4][]; // creating array for store seat status
+    private static final Ticket[][] Sold_Tickets = new Ticket[4][14]; // creating array for store ticket object
+
     public static void main(String[] args) {
-        System.out.println("Welcome to the Plane Management application\n");
+        System.out.println("\nWelcome to the Plane Management application\n");
         gen_seat_list();
         show_menu();
     }
@@ -31,7 +32,7 @@ public class PlaneManagement {
                     6) Search ticket
                     0) Quit
                 ***************************************************
-                Please select an option:\s""");
+                  Please select an option:\s""");
 
         int choice = get_choice();
 
@@ -64,7 +65,7 @@ public class PlaneManagement {
     }
 
     private static int get_choice(){  //get input for selection and make sure selected option is not in
-        int choice = 0;
+        int choice;
         Scanner input = new Scanner(System.in);
         try {
             choice = input.nextInt();
@@ -187,10 +188,10 @@ public class PlaneManagement {
             System.out.println("Last name: " + person.getSurname());
             System.out.println("Email: " + person.getEmail());
 
-            System.out.print("\nSeat " + (row_index_to_letter(row_index)) +" "+ (seat_index + 1) + " has been reserved successfully.\n");
+            System.out.print("\nSeat " + (row_index_to_letter(row_index)) + (seat_index + 1) + " has been reserved successfully.\n");
             press_enter_to_continue();
         } else{
-            System.out.print("\nSeat " + (row_index_to_letter(row_index)) +" "+ (seat_index + 1) + " is already reserved by someone else.\n");
+            System.out.print("\nSeat " + (row_index_to_letter(row_index)) + (seat_index + 1) + " is already reserved by someone else.\n");
             press_enter_to_continue();
         }
     }
@@ -200,12 +201,12 @@ public class PlaneManagement {
         int seat_index = get_seat_number(row_index)-1;
         if (SeatsArray[row_index][seat_index] == 1){
             SeatsArray[row_index][seat_index] = 0;
-            Sold_Tickets[row_index][seat_index].delete();
+//            Sold_Tickets[row_index][seat_index].delete();
             Sold_Tickets[row_index][seat_index] = null;
-            System.out.print("\nSeat " + (row_index_to_letter(row_index)) +" "+ (seat_index + 1) + " has been canceled successfully.\n");
+            System.out.print("\nSeat " + (row_index_to_letter(row_index)) + (seat_index + 1) + " has been cancelled successfully.\n");
             press_enter_to_continue();
         } else{
-            System.out.print("\nSeat " + (row_index_to_letter(row_index)) +" "+ (seat_index + 1) + " is not reserved yet.\n");
+            System.out.print("\nSeat " + (row_index_to_letter(row_index)) + (seat_index + 1) + " is not reserved yet.\n");
             press_enter_to_continue();
         }
     }
@@ -230,7 +231,7 @@ public class PlaneManagement {
             int seatsInRow = SeatsArray[row].length;
             for (int seatNumber = 0; seatNumber < seatsInRow; seatNumber++) {
                 if (SeatsArray[row][seatNumber] == 0) {
-                    System.out.println("\nFirst Available Seat " + (row_index_to_letter(row)) + "-" + (seatNumber + 1) + " \n");
+                    System.out.println("\nFirst Available Seat is " + (row_index_to_letter(row)) + (seatNumber + 1) + " \n");
                     press_enter_to_continue();
                     return;
                 }
@@ -274,7 +275,6 @@ public class PlaneManagement {
     }
 
     private static void search_ticket() { //print user selected seat info if  it is reserved
-        Scanner input = new Scanner(System.in);
         int row_index = get_row_index();
         int seat_index = get_seat_number(row_index)-1;
         if (Sold_Tickets[row_index][seat_index] != null){
