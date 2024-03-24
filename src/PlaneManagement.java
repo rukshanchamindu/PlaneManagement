@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class PlaneManagement {
@@ -180,10 +181,11 @@ public class PlaneManagement {
             Sold_Tickets[row_index][seat_index] = ticket;
             ticket.save();
 
+            System.out.println("\n       Booking Details");
             System.out.println("\nTicket Information:");
             System.out.println("Seat: " + ticket.getRow() + ticket.getSeat());
             System.out.println("Price: £" + ticket.getPrice());
-            System.out.println("Person Information:");
+            System.out.println("\nPerson Information:");
             System.out.println("First Name: " + person.getName());
             System.out.println("Last name: " + person.getSurname());
             System.out.println("Email: " + person.getEmail());
@@ -201,7 +203,7 @@ public class PlaneManagement {
         int seat_index = get_seat_number(row_index)-1;
         if (SeatsArray[row_index][seat_index] == 1){
             SeatsArray[row_index][seat_index] = 0;
-//            Sold_Tickets[row_index][seat_index].delete();
+            Sold_Tickets[row_index][seat_index].delete();
             Sold_Tickets[row_index][seat_index] = null;
             System.out.print("\nSeat " + (row_index_to_letter(row_index)) + (seat_index + 1) + " has been cancelled successfully.\n");
             press_enter_to_continue();

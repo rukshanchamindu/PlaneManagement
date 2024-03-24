@@ -96,17 +96,17 @@ public class Ticket {
             System.out.println("Failed To write a text file "+filename+" "+e);
         }
     }
-//    public void delete() {
-//        String filename = this.row+this.seat+".txt";
-//        File file = new File(filename);
-//        if (file.exists()){
-//            file.delete();
-////            System.out.println("File deleted.");
-//        }
-//        else{
-//            System.out.println("File does not exist.");
-//        }
-//    }
+    public void delete() {
+        String filename = this.row+this.seat+".txt";
+        File file = new File(filename);
+        if (file.exists()){
+            file.delete();
+//            System.out.println("File deleted.");
+        }
+        else{
+            System.out.println("File does not exist.");
+        }
+    }
 
     // Example usage
     public static void main(String[] args) {
